@@ -7,6 +7,7 @@ func NewClient(endpoint string) (c *Client) {
 	c = new(Client)
 	c.endpoint = endpoint
 	c.idSeq = 1
+	c.Debug = false
 	return
 }
 
@@ -14,6 +15,8 @@ type Client struct {
 	idSeq     int
 	endpoint  string
 	sessionId string
+
+	Debug bool
 }
 
 func (this *Client) WobbleVersion() (string, error) {
@@ -265,14 +268,18 @@ func (this *Client) callMap(method string, params map[string]interface{}, result
 	if err != nil {
 		return err
 	}
-	//log.Println(string(data))
+	if this.Debug {
+		log.Println(string(data))
+	}
 	return json.Unmarshal(data, result)
 }
 
 func (this *Client) call(method string, params map[string]interface{}) (interface{}, error) {
 	id := this.idSeq
 	this.idSeq++
-	log.Printf("#%04d - Calling %s with %+v\n", id, method, params)
+	if this.Debug {
+		log.Printf("#%04d - Calling %s with %+v\n", id, method, params)
+	}
 	if this.sessionId != "" {
 		params["apikey"] = this.sessionId
 	}

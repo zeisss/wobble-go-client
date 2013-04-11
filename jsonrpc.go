@@ -8,12 +8,13 @@ import (
 	"strings"
 )
 
-// Performs a JSON-RPC 2.0 call to the endpoint
-// Copied from https://github.com/ThePiachu/Go-HTTP-JSON-RPC/blob/master/httpjsonrpc/httpjsonrpcClient.go
+// Performs a JSON-RPC 2.0 call to the endpoint.
+//
+// Copied from <https://github.com/ThePiachu/Go-HTTP-JSON-RPC/blob/master/httpjsonrpc/httpjsonrpcClient.go>.
 // Modified by Stephan Zeissler
 func JsonRpcCall(address, method string, id interface{}, params interface{}) (interface{}, error) {
 	data, err := json.Marshal(map[string]interface{}{
-		"version": "2.0",
+		"jsonrpc": "2.0",
 		"id":      id,
 		"method":  method,
 		"params":  params,
